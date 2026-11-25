@@ -1,0 +1,8 @@
+docs/
+tests/
+.github/
+.venv/
+.pytest_cache/
+__pycache__/
+*.pyc
+*.sqlite3

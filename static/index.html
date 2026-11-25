@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#0b1220">
+  <title>Payment Trust | Risk Operations</title>
+  <link rel="stylesheet" href="/static/style.css?v=1.1.0">
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+    <div class="brand">
+      <span class="brand-symbol">P<span class="brand-point">.</span></span>
+      <span class="brand-copy"><strong>PAYMENT TRUST</strong><small>Risk operations</small></span>
+    </div>
+    <div class="navigation-caption">WORKSPACE</div>
+    <nav aria-label="Primary navigation">
+      <button class="active" data-tab="overview"><span class="nav-symbol">◫</span> Command center</button>
+      <button data-tab="cases"><span class="nav-symbol">▤</span> Case operations</button>
+      <button data-tab="support"><span class="nav-symbol">⊕</span> Member intake</button>
+      <button data-tab="analysis"><span class="nav-symbol">▥</span> Investigations</button>
+      <button data-tab="rules"><span class="nav-symbol">◇</span> Detection strategy</button>
+    </nav>
+    <div class="sidebar-bottom">
+      <div class="env"><span class="status-dot"></span> LOCAL ENVIRONMENT</div>
+      <div>Simulated payment ledger</div>
+      <div class="sidebar-link"><a href="/docs" target="_blank" rel="noopener">API reference <span>↗</span></a></div>
+    </div>
+  </aside>
+  <div class="workspace">
+    <div class="topbar"><div class="breadcrumb">RISK OPERATIONS <span>/</span> <strong id="breadcrumb">Command center</strong></div><div class="topbar-right"><span class="mode">SIMULATION MODE</span><span class="avatar">PT</span></div></div>
+    <main>
+      <header class="page-header">
+        <div><div class="overline" id="sectionLabel">OVERVIEW</div><h1 id="heading">Command center</h1><p id="subheading">Payment risk, member friction, and review performance.</p></div>
+        <span class="period">DATA WINDOW <strong>JUL–SEP 2026</strong></span>
+      </header>
+      <div id="message" role="status" aria-live="polite"></div>
+      <section class="panel active" id="overview">
+        <div class="kpis" id="kpis"><div class="stat">Loading operational data…</div></div>
+        <div class="section-row"><div><h2>Investigation briefing</h2><p class="subtle">Three hypotheses. One measurable decision.</p></div><button class="quiet" onclick="tab('analysis')">Open investigations <span>↗</span></button></div>
+        <div class="overview-grid">
+          <div class="card narrative-card">
+            <div class="card-top"><span class="card-kicker">SIGNAL 01 / INTAKE VOLUME</span><span class="indicator">REQUIRES ANALYSIS</span></div>
+            <h3>Are more complaints evidence of more fraud?</h3>
+            <p class="muted">Contact volume alone cannot distinguish unauthorized activity from posting delays, growth in successful payments, or repeated contacts about the same transaction.</p>
+            <div class="hypotheses">
+              <div><span class="hypo-num">01</span><span>Increase in confirmed unauthorized payments</span></div>
+              <div><span class="hypo-num">02</span><span>Legitimate payments delayed in posting</span></div>
+              <div><span class="hypo-num">03</span><span>Volume growth and repeat contacts</span></div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-top"><span class="card-kicker">OPERATING MODEL</span><span class="small-circle">↗</span></div>
+            <h3>From member signal to control decision</h3>
+            <div class="process">
+              <div><span class="process-no">01</span><span><strong>Intake</strong><small>Link an allegation to one payment</small></span></div>
+              <div><span class="process-no">02</span><span><strong>Investigate</strong><small>Inspect payment events and contacts</small></span></div>
+              <div><span class="process-no">03</span><span><strong>Validate</strong><small>Compare cohorts and evaluate review rules</small></span></div>
+              <div><span class="process-no">04</span><span><strong>Decide</strong><small>Balance coverage against member friction</small></span></div>
+            </div>
+            <button class="primary start-btn" onclick="tab('cases')">Open case workspace <span>→</span></button>
+          </div>
+        </div>
+        <div class="section-row"><div><h2>Signal trends</h2><p class="subtle">Contacts normalized against successful payments</p></div><span class="chart-note">MONTHLY · MATURE COHORTS</span></div>
+        <div class="card chart-card"><div id="overviewTrend" class="chart-loading">Loading trends…</div></div>
+      </section>
+      <section class="panel" id="cases">
+        <div class="case-workspace">
+          <div class="card case-rail">
+            <div class="card-top"><div><span class="card-kicker">CASE QUEUE</span><h2>Member-reported disputes</h2></div><button class="icon-btn" title="Refresh cases" onclick="loadCases()">↻</button></div>
+            <input id="caseSearch" class="search-input" placeholder="Filter by case, payment or member ID…" aria-label="Search cases">
+            <div class="case-legend"><span>RECENT CONTACTS</span><span id="queueCount"></span></div>
+            <div class="case-list" id="caseList">Loading cases…</div>
+          </div>
+          <div class="card case-inspector">
+            <div class="card-top"><div><span class="card-kicker">INVESTIGATION WORKSPACE</span><h2>Payment evidence</h2></div><span class="mode mode-light">ANALYST VIEW</span></div>
+            <div id="paymentDetail" class="empty-state"><span class="empty-icon">▤</span><h3>Select a case</h3><p>Choose a member contact to review its transaction, payment events, previous contacts, and recorded findings.</p></div>
+          </div>
+        </div>
+      </section>
+      <section class="panel" id="support">
+        <div class="support-layout">
+          <div class="card">
+            <div class="card-top"><div><span class="card-kicker">NEW MEMBER CONTACT</span><h2>Report a payment concern</h2></div><span class="mode mode-light">INTAKE</span></div>
+            <p class="muted">Capture the member’s allegation. A report is not proof of unauthorized activity.</p>
+            <label for="memberId">Member ID</label>
+            <div class="inline"><input id="memberId" placeholder="e.g. MBR-0001"><button onclick="loadPayments()">Find payments</button></div>
+            <label for="paymentSelect">Related payment</label>
+            <select id="paymentSelect"><option value="">Find member payments to select one</option></select>
+            <label for="complaintNote">Member statement</label>
+            <textarea id="complaintNote" rows="4">I don't recognise this credit-card bill payment. Please investigate.</textarea>
+            <button class="primary" data-write-action onclick="submitComplaint()">Create unresolved case <span>→</span></button>
+            <div class="result" id="complaintResult" role="status"></div>
+          </div>
+          <div class="card policy-card">
+            <span class="card-kicker">INTAKE CONTROLS</span><h3>Keep allegations and outcomes separate</h3>
+            <div class="policy-rule"><span>01</span><div><strong>Explicit payment selection</strong><p>A member can have multiple legitimate bill payments. The selected payment must match the supplied member.</p></div></div>
+            <div class="policy-rule"><span>02</span><div><strong>No automatic fraud finding</strong><p>Opening a case creates a member allegation; analyst dispositions are stored separately.</p></div></div>
+            <div class="policy-rule"><span>03</span><div><strong>No live account access</strong><p>IDs and payments here are simulated. Real financial systems require identity verification and authorization.</p></div></div>
+          </div>
+        </div>
+      </section>
+      <section class="panel" id="analysis">
+        <div class="insight-strip"><strong>Analytical question</strong><span>Are contact rates rising, or are we simply seeing more activity and repeat reporting?</span></div>
+        <div class="card analysis-main"><div class="card-top"><div><span class="card-kicker">COHORT COMPARISON</span><h2>Payment and complaint trends</h2></div><span class="mode mode-light">45-DAY MATURITY WINDOW</span></div><p class="muted">Payments are grouped by payment month. Contacts are deduplicated to the appropriate grain before payment values are summed.</p><div id="monthly"></div></div>
+        <div class="two-col">
+          <div class="card"><div class="card-top"><span class="card-kicker">SEGMENTATION</span><h2>Product flow contribution</h2></div><div id="flowTable"></div></div>
+          <div class="card"><div class="card-top"><span class="card-kicker">ALTERNATIVE EXPLANATION</span><h2>Payment posting delays</h2></div><div id="postingTable"></div></div>
+        </div>
+        <div class="caution"><strong>Interpretation guardrail.</strong> Repeated contacts are not distinct disputed payments. Unresolved cases are not genuine or fraudulent by default. Payment value must be aggregated before joining one-to-many tables.</div>
+      </section>
+      <section class="panel" id="rules">
+        <div class="insight-strip"><strong>Decision context</strong><span id="ruleIntro">Loading rule evaluation…</span></div>
+        <div class="section-row"><div><h2>Review strategies</h2><p class="subtle">Payment-time signals evaluated against matured outcomes</p></div><span class="mode mode-light">HOLDOUT · SEPT 2026</span></div>
+        <div class="rule-grid" id="ruleCards"></div>
+        <div class="card"><div class="card-top"><span class="card-kicker">INCREMENTAL IMPACT</span><h2>What does the additional control change?</h2></div><div id="incremental"></div><div class="caution inside" id="ruleCaveat"></div></div>
+        <div class="recommendation"><div><span class="rec-label">RECOMMENDED NEXT STEP</span><h2>Validate in shadow mode</h2><p>Run the new rule without affecting payments. Verify incremental fraud coverage against false positives, reviewer workload, and member friction before turning it into an active control.</p></div><span class="rec-icon">↗</span></div>
+        <p class="muted disclaimer">Historical covered loss is not prevented loss. This is an analytical recommendation, not an automated operational decision.</p>
+      </section>
+    </main>
+  </div>
+</div>
+<script src="/static/app.js?v=1.1.0"></script>
+</body>
+</html>

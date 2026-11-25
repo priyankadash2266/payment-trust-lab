@@ -1,0 +1,7 @@
+__pycache__/
+*.pyc
+.venv/
+.pytest_cache/
+fraud_lab.sqlite3
+.env
+.DS_Store
